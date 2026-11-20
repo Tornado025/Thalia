@@ -1,7 +1,7 @@
 import { Fragment } from 'react'
 import { Text, type TextStyle } from 'react-native'
 
-import type { NWord, TermSpan } from '../../nlp'
+import { splitToken, type NWord, type TermSpan } from '../../nlp'
 import { color, font, size } from '../theme'
 import { scriptRuns } from './Txt'
 
@@ -28,6 +28,7 @@ export function TermText({ words, terms, uncertain = [], onPressWord, dark, font
       {words.map((w, i) => {
         const term = termAt.get(i)
         const isUncertain = uncertain.includes(i)
+        const parts = splitToken(w.text)
         const style: TextStyle = {
           ...(term && {
             backgroundColor: dark ? color.dTermBg : color.termBg,
@@ -43,15 +44,17 @@ export function TermText({ words, terms, uncertain = [], onPressWord, dark, font
           }),
         }
         // Keep the highlight continuous across a multi-word term.
-        const joinNext = term && termAt.get(i + 1) === term
+        const joinNext = term && termAt.get(i + 1) === term && !parts.post
         return (
           <Fragment key={i}>
             <Text
-              style={style}
               onPress={onPressWord ? () => onPressWord(i) : undefined}
               accessibilityRole={onPressWord ? 'button' : undefined}
               accessibilityHint={isUncertain ? 'Not sure about this word' : undefined}>
-              {scriptRuns(w.text, { ...base, ...style })}
+              {/* Highlight the word itself, not surrounding punctuation like `coolant.` */}
+              {parts.pre}
+              <Text style={style}>{scriptRuns(parts.latin + parts.rest, { ...base, ...style })}</Text>
+              {parts.post}
             </Text>
             {i < words.length - 1 ? <Text style={joinNext ? style : undefined}> </Text> : null}
           </Fragment>

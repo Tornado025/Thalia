@@ -1,5 +1,4 @@
 import { router } from 'expo-router'
-import { Paths } from 'expo-file-system'
 import { Check, Pause, Play, Trash2, X } from 'lucide-react-native'
 import { useEffect, useRef, useState } from 'react'
 import { ActivityIndicator, Alert, Pressable, StyleSheet, View } from 'react-native'
@@ -7,6 +6,7 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 
 import { engineKind } from '@/asr'
 import type { NoiseLevel } from '@/audio/noise'
+import { recordingWavPath } from '@/audio/paths'
 import { PEAK_COUNT, placeholderPeaks } from '@/audio/waveform'
 import { newId } from '@/db/client'
 import { deleteRecording, getRecording, insertRecording } from '@/db/recordings'
@@ -64,7 +64,7 @@ export default function RecordingScreen() {
     await insertRecording({
       id,
       vehicleType: vehicle,
-      wavPath: `${Paths.document.uri}recordings/${id}.wav`,
+      wavPath: recordingWavPath(id),
       durationMs: elapsed,
       noiseLevel: noise,
       waveform: placeholderPeaks(id),

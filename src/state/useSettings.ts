@@ -1,7 +1,7 @@
-import Storage from 'expo-sqlite/kv-store'
 import { create } from 'zustand'
 import { createJSONStorage, persist } from 'zustand/middleware'
 
+import { settingsStorage } from '../db/settings'
 import { defaultModel } from '../models/manifest'
 import type { VehicleType } from '../nlp'
 
@@ -24,6 +24,6 @@ export const useSettings = create<Settings>()(
       saveCorrections: true,
       set: (patch) => set(patch),
     }),
-    { name: 'thalia-settings', storage: createJSONStorage(() => Storage) },
+    { name: 'thalia-settings', storage: createJSONStorage(() => settingsStorage) },
   ),
 )

@@ -32,6 +32,7 @@ export const MIGRATIONS: string[] = [
      id TEXT PRIMARY KEY, created_at INTEGER, device TEXT, model_id TEXT, clip TEXT,
      audio_ms INTEGER, load_ms INTEGER, transcribe_ms INTEGER, rtf REAL, text TEXT
    );`,
+  `CREATE TABLE settings (key TEXT PRIMARY KEY, value TEXT NOT NULL);`,
 ]
 
 export async function migrate(db: SQLiteDatabase) {
@@ -39,10 +40,14 @@ export async function migrate(db: SQLiteDatabase) {
   const row = await db.getFirstAsync<{ user_version: number }>('PRAGMA user_version')
   let version = row?.user_version ?? 0
   while (version < MIGRATIONS.length) {
-    await db.withTransactionAsync(async () => {
-      await db.execAsync(MIGRATIONS[version])
-      await db.execAsync(`PRAGMA user_version = ${version + 1}`)
-    })
+    // One exec call, so no other query on this connection can interleave with the
+    // transaction (withTransactionAsync is not exclusive and broke first launch on web).
+    try {
+      await db.execAsync(`BEGIN; ${MIGRATIONS[version]}; PRAGMA user_version = ${version + 1}; COMMIT;`)
+    } catch (e) {
+      await db.execAsync('ROLLBACK').catch(() => {})
+      throw e
+    }
     version++
   }
 }
