@@ -45,7 +45,7 @@ npx expo run:android
   Home → Recording (fake timer) → Transcript (auto-fix, "Not sure" card, inline edit) → Job card → History.
 - [x] **M2** real audio — expo-audio `AudioStream` → 16 kHz mono PCM16 WAV, live noise meter + waveform,
   pause/resume, mic-permission screen, one-at-a-time playback in Transcript + History.
-  Verified on the emulator (WAV reads back as 16 kHz mono 16-bit); still to check speech on a real phone.
+  Verified on a Redmi Note 13 Pro 5G (HyperOS): live waveform/noise meter, record, play back.
 - [ ] **M3** whisper.rn engine, model download + sha256
 - [ ] **M4** correction export, PDF share, re-dictate (plain-text share is done)
 - [ ] **M5** Compare + Benchmark
