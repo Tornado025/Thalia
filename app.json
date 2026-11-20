@@ -39,7 +39,8 @@
         }
       ],
       "expo-sharing",
-      "expo-asset"
+      "expo-asset",
+      "./plugins/withGradleHeap"
     ],
     "experiments": {
       "typedRoutes": true,

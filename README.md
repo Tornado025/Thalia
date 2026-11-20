@@ -13,7 +13,9 @@ npx tsc --noEmit                # type check
 npx expo lint
 ```
 
-The app uses native modules, so it needs a **development build** (not Expo Go):
+The app uses native modules, so it needs a **development build** (not Expo Go).
+Local Android builds need JDK 17 and the Android SDK (platform 37, build-tools 37, NDK 27.1) with
+`JAVA_HOME` / `ANDROID_HOME` set; Gradle gets a 4 GB heap via `plugins/withGradleHeap.js`.
 
 ```sh
 npx eas-cli@latest build -p android --profile development   # once, or when native deps change
@@ -38,7 +40,7 @@ npx expo run:android
 ## Status (see [`docs/ROADMAP.md`](docs/ROADMAP.md))
 
 - [x] **M0** skeleton — Expo SDK 58, strict TS, Expo Router, theme + components, tabs, `eas.json`.
-  _Still to do on a phone: install the dev build and check Kannada fonts render._
+  Dev build verified on an Android 16 emulator (Pixel 8, arm64); Kannada fonts render.
 - [x] **M1** mock end-to-end — mock engine, `src/nlp` with pilot-fixture tests, DB + migrations,
   Home → Recording (fake timer) → Transcript (auto-fix, "Not sure" card, inline edit) → Job card → History.
 - [ ] **M2** real audio — `wav.ts`, `noise.ts`, `waveform.ts` done + tested; PCM recorder and playback to do.

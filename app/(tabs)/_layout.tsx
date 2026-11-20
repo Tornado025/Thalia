@@ -1,16 +1,22 @@
 import { Tabs } from 'expo-router'
 import { Cpu, History, Mic } from 'lucide-react-native'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 import { color, font } from '@/ui/theme'
 
 export default function TabLayout() {
+  const insets = useSafeAreaInsets()
   return (
     <Tabs
       screenOptions={{
         headerShown: false,
         tabBarActiveTintColor: color.ink,
         tabBarInactiveTintColor: color.muted,
-        tabBarStyle: { backgroundColor: color.surface, borderTopColor: color.border, height: 64, paddingTop: 6 },
+        // Keep labels clear of the Android gesture bar / iOS home indicator.
+        tabBarStyle: {
+          backgroundColor: color.surface, borderTopColor: color.border,
+          height: 64 + insets.bottom, paddingTop: 6, paddingBottom: insets.bottom + 6,
+        },
         tabBarLabelStyle: { fontFamily: font.semibold, fontSize: 12 },
         sceneStyle: { backgroundColor: color.bg },
       }}>
