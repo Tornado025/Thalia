@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="kn">
+<head>
+<meta charset="utf-8">
+<title>Thalia – Live recording</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Space+Grotesk:wght@500;600;700&amp;family=Noto+Sans+Kannada:wght@400;500;600;700&amp;display=swap">
+<style>
+body{margin:0}
+a{color:#F3F4F6;text-decoration:none}a:hover{color:#FFFFFF}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; box-sizing: border-box; background: #121417; color: #F3F4F6; font-family: Inter, 'Noto Sans Kannada', sans-serif; display: flex; flex-direction: column; padding: 52px 20px 36px 20px; gap: 18px; overflow: hidden">
+  <div style="display: flex; align-items: center; justify-content: space-between">
+    <a href="Main.dc.html" aria-label="Cancel recording" style="width: 44px; height: 44px; border-radius: 999px; background: #22262B; display: flex; align-items: center; justify-content: center">
+      <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"></path></svg>
+    </a>
+    <div style="display: flex; align-items: center; gap: 8px; font-family: 'Space Grotesk', sans-serif; font-size: 20px; font-weight: 600">
+      <span aria-hidden="true" style="width: 10px; height: 10px; border-radius: 999px; background: #FF5A4E"></span>
+      <span>{{statusLabel}} · 00:14</span>
+    </div>
+    <div style="padding: 6px 10px; border-radius: 999px; background: #22262B; font-size: 12px; font-weight: 600">Bike</div>
+  </div>
+
+  <div style="display: flex; flex-direction: column; gap: 8px; background: #1B1E22; border: 1px solid #2C3137; border-radius: 14px; padding: 12px 14px">
+    <div style="display: flex; justify-content: space-between; align-items: center">
+      <div style="font-size: 13px; font-weight: 600; color: #A8B0BC">Workshop noise</div>
+      <div style="font-size: 13px; font-weight: 700; color: #FFD48A">Heavy</div>
+    </div>
+    <div aria-hidden="true" style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 4px">
+      <div style="height: 6px; border-radius: 3px; background: #6E7682"></div>
+      <div style="height: 6px; border-radius: 3px; background: #B9C0CA"></div>
+      <div style="height: 6px; border-radius: 3px; background: {{accent}}"></div>
+    </div>
+    <div style="font-size: 12px; color: #A8B0BC">Engine running nearby — hold the phone closer to your mouth.</div>
+  </div>
+
+  <div aria-hidden="true" style="height: 96px; display: flex; align-items: center; justify-content: center; gap: 4px">
+    <sc-for list="{{bars}}" as="b" hint-placeholder-count="34">
+      <div style="{{b.style}}"></div>
+    </sc-for>
+  </div>
+
+  <div style="flex-grow: 1; display: flex; flex-direction: column; gap: 10px; min-height: 0">
+    <div style="font-size: 11px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #A8B0BC">Live transcript</div>
+    <div style="font-family: 'Noto Sans Kannada', Inter, sans-serif; font-size: 19px; line-height: 1.7; color: #F3F4F6">
+      ಇವಾಗ ನೋಡಿ ಇಲ್ಲಿ <span style="font-family: Inter, sans-serif; font-weight: 600; background: #4A3410; color: #FFD48A; padding: 1px 6px; border-radius: 6px">drain bolt</span> ತೆಗೆದು ಬರಲಿಲ್ಲ <span style="font-family: Inter, sans-serif; font-weight: 600; background: #4A3410; color: #FFD48A; padding: 1px 6px; border-radius: 6px">coolant</span>. ಇದು <span style="font-family: Inter, sans-serif; font-weight: 600; background: #4A3410; color: #FFD48A; padding: 1px 6px; border-radius: 6px">coolant</span> ಎಳ್ಕೊಳೋಕೆ <span style="font-family: Inter, sans-serif; font-weight: 600; background: #4A3410; color: #FFD48A; padding: 1px 6px; border-radius: 6px">air out</span> ಆಗ್ಬೇಕು.
+      <span style="color: #8A929E">air out ಆದ್ರೆನೇ coolant…</span>
+    </div>
+    <div style="display: flex; align-items: center; gap: 8px; font-size: 12px; color: #A8B0BC; margin-top: auto">
+      <svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="5" width="14" height="14" rx="2"></rect><rect x="9" y="9" width="6" height="6"></rect></svg>
+      Transcribing on this phone — no internet used
+    </div>
+  </div>
+
+  <div style="display: flex; align-items: center; justify-content: space-between; padding: 0 12px">
+    <a href="Main.dc.html" aria-label="Discard recording" style="width: 64px; height: 64px; border-radius: 999px; background: #22262B; display: flex; align-items: center; justify-content: center">
+      <svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"></path><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"></path><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+    </a>
+    <a href="Transcript.dc.html" aria-label="Finish and review" style="width: 92px; height: 92px; border-radius: 999px; background: {{accent}}; color: #111418; display: flex; align-items: center; justify-content: center">
+      <svg aria-hidden="true" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#111418" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg>
+    </a>
+    <button type="button" onClick="{{togglePause}}" aria-label="{{pauseLabel}}" style="width: 64px; height: 64px; border-radius: 999px; background: #22262B; border: 0; color: #F3F4F6; display: flex; align-items: center; justify-content: center; cursor: pointer">
+      <sc-if value="{{paused}}" hint-placeholder-val="{{ false }}">
+        <svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M7 4v16l13-8z"></path></svg>
+      </sc-if>
+      <sc-if value="{{running}}" hint-placeholder-val="{{ true }}">
+        <svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16" rx="1"></rect><rect x="14" y="4" width="4" height="16" rx="1"></rect></svg>
+      </sc-if>
+    </button>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"accent":{"editor":"color","default":"#F5A524","options":["#F5A524","#FFD23F","#4CC38A","#7AB8FF"]},"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { paused: false };
+  }
+  renderVals() {
+    const accent = this.props.accent ?? '#F5A524';
+    const heights = [18,30,52,40,70,88,62,44,28,36,58,80,92,74,50,34,22,40,64,86,70,48,30,20,34,56,76,60,42,26,16,24,14,10];
+    const paused = this.state.paused;
+    const bars = heights.map((h, i) => ({
+      style: 'width: 5px; border-radius: 3px; height: ' + (paused ? 6 : h) + 'px; background: ' + (i < 26 ? accent : '#3A4047') + ';'
+    }));
+    return {
+      accent,
+      bars,
+      paused,
+      running: !paused,
+      statusLabel: paused ? 'Paused' : 'Listening',
+      pauseLabel: paused ? 'Resume recording' : 'Pause recording',
+      togglePause: () => this.setState({ paused: !paused })
+    };
+  }
+}
+</script>
+</body>
+</html>

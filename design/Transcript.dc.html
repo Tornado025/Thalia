@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="kn">
+<head>
+<meta charset="utf-8">
+<title>Thalia – Review transcript</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Space+Grotesk:wght@500;600;700&amp;family=Noto+Sans+Kannada:wght@400;500;600;700&amp;display=swap">
+<style>
+body{margin:0}
+a{color:#111418;text-decoration:none}a:hover{color:#111418}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; box-sizing: border-box; background: #F3F4F6; color: #111418; font-family: Inter, 'Noto Sans Kannada', sans-serif; display: flex; flex-direction: column; overflow: hidden">
+  <div style="padding: 52px 20px 0 20px; display: flex; flex-direction: column; gap: 14px; flex-grow: 1; min-height: 0">
+    <div style="display: flex; align-items: center; gap: 10px">
+      <a href="Main.dc.html" aria-label="Back" style="width: 44px; height: 44px; border-radius: 999px; background: #FFFFFF; border: 1px solid #DDE1E6; box-sizing: border-box; display: flex; align-items: center; justify-content: center">
+        <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"></path><path d="M19 12H5"></path></svg>
+      </a>
+      <div style="font-family: 'Space Grotesk', sans-serif; font-size: 21px; font-weight: 600; flex-grow: 1">Review transcript</div>
+    </div>
+
+    <div style="display: flex; align-items: center; gap: 12px; background: #FFFFFF; border: 1px solid #DDE1E6; border-radius: 14px; padding: 8px 12px 8px 8px">
+      <button type="button" aria-label="Play recording" style="width: 44px; height: 44px; border-radius: 999px; border: 0; background: #111418; color: #FFFFFF; display: flex; align-items: center; justify-content: center; cursor: pointer">
+        <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M7 4v16l13-8z"></path></svg>
+      </button>
+      <div style="flex-grow: 1; height: 6px; border-radius: 3px; background: #E4E7EB; display: flex">
+        <div style="width: 38%; border-radius: 3px; background: {{accent}}"></div>
+      </div>
+      <div style="font-size: 13px; color: #565D68; font-variant-numeric: tabular-nums">0:18 / 0:48</div>
+    </div>
+
+    <div role="group" aria-label="Transcript script" style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 4px; background: #E4E7EB; padding: 4px; border-radius: 12px">
+      <sc-for list="{{tabs}}" as="t" hint-placeholder-count="3">
+        <button type="button" onClick="{{t.pick}}" aria-pressed="{{t.pressed}}" style="{{t.style}}">{{t.label}}</button>
+      </sc-for>
+    </div>
+
+    <div style="background: #FFFFFF; border: 1px solid #DDE1E6; border-radius: 14px; padding: 14px 16px; font-family: 'Noto Sans Kannada', Inter, sans-serif; font-size: 17px; line-height: 1.75">
+      <sc-if value="{{showMixed}}" hint-placeholder-val="{{ true }}">
+        <div>ಇವಾಗ ನೋಡಿ ಇಲ್ಲಿ <span style="font-family: Inter, sans-serif; font-weight: 600; background: #FDEFD2; color: #6B4100; padding: 1px 6px; border-radius: 6px">drain bolt</span> ತೆಗೆದು ಬರಲಿಲ್ಲ <span style="font-family: Inter, sans-serif; font-weight: 600; background: #FDEFD2; color: #6B4100; padding: 1px 6px; border-radius: 6px">coolant</span>. <span style="font-family: Inter, sans-serif; font-weight: 600; background: #FDEFD2; color: #6B4100; padding: 1px 6px; border-radius: 6px">coolant</span> ಎಳ್ಕೊಳೋಕೆ <span style="font-family: Inter, sans-serif; font-weight: 600; background: #FDEFD2; color: #6B4100; padding: 1px 6px; border-radius: 6px">air out</span> ಆಗ್ಬೇಕು. ಕೆಲವೊಂದು time ಈ hole <span style="{{holeStyle}}">{{holeWord}}</span> ಆಗಿರುತ್ತೆ. ಬಿಚ್ಚಿದಾಗ check ಮಾಡ್ಕೋಬೇಕು.</div>
+      </sc-if>
+      <sc-if value="{{showKannada}}" hint-placeholder-val="{{ false }}">
+        <div>ಇವಾಗ ನೋಡಿ ಇಲ್ಲಿ ಡ್ರೈನ್ ಬೋಲ್ಟ್ ತೆಗೆದು ಬರಲಿಲ್ಲ ಕೂಲೆಂಟ್. ಕೂಲೆಂಟ್ ಎಳ್ಕೊಳೋಕೆ ಏರ್ ಔಟ್ ಆಗ್ಬೇಕು. ಕೆಲವೊಂದು ಟೈಮ್ ಈ ಹೋಲ್ {{holeWordKn}} ಆಗಿರುತ್ತೆ. ಬಿಚ್ಚಿದಾಗ ಚೆಕ್ ಮಾಡ್ಕೋಬೇಕು.</div>
+      </sc-if>
+      <sc-if value="{{showEnglish}}" hint-placeholder-val="{{ false }}">
+        <div style="font-family: Inter, sans-serif; font-size: 16px">Look here — the drain bolt was removed but no coolant came out. To draw the coolant in, the air has to be bled out. Sometimes this hole gets {{holeWordEn}}. When you open it, check it.</div>
+      </sc-if>
+    </div>
+
+    <sc-if value="{{needsCheck}}" hint-placeholder-val="{{ true }}">
+      <div style="display: flex; flex-direction: column; gap: 10px; background: #E8EEFC; border-radius: 14px; padding: 12px 14px">
+        <div style="font-size: 14px; font-weight: 600; color: #15307A">Not sure about one word — which did you say?</div>
+        <div style="display: flex; gap: 8px">
+          <button type="button" onClick="{{pickBlock}}" style="flex-grow: 1; min-height: 44px; border-radius: 10px; border: 0; background: #1F4FD1; color: #FFFFFF; font-family: Inter, sans-serif; font-size: 15px; font-weight: 600; cursor: pointer">hole block</button>
+          <button type="button" onClick="{{pickBlack}}" style="flex-grow: 1; min-height: 44px; border-radius: 10px; border: 1px solid #A9BBEB; background: #FFFFFF; color: #15307A; font-family: Inter, sans-serif; font-size: 15px; font-weight: 600; cursor: pointer">hole black</button>
+          <button type="button" aria-label="Type it myself" style="width: 44px; min-height: 44px; border-radius: 10px; border: 1px solid #A9BBEB; background: #FFFFFF; color: #15307A; display: flex; align-items: center; justify-content: center; cursor: pointer">
+            <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"></path><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"></path></svg>
+          </button>
+        </div>
+      </div>
+    </sc-if>
+    <sc-if value="{{checked}}" hint-placeholder-val="{{ false }}">
+      <div style="display: flex; align-items: center; gap: 8px; background: #E3F4EA; color: #145A32; border-radius: 14px; padding: 12px 14px; font-size: 14px; font-weight: 600">
+        <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg>
+        Fixed — added to your training queue
+      </div>
+    </sc-if>
+
+    <div style="display: flex; flex-direction: column; gap: 8px">
+      <div style="font-size: 13px; font-weight: 600; color: #565D68">Parts &amp; faults detected</div>
+      <div style="display: flex; gap: 6px; flex-wrap: wrap">
+        <span style="font-size: 13px; font-weight: 600; padding: 5px 10px; border-radius: 8px; background: #FDEFD2; color: #6B4100">drain bolt</span>
+        <span style="font-size: 13px; font-weight: 600; padding: 5px 10px; border-radius: 8px; background: #FDEFD2; color: #6B4100">coolant</span>
+        <span style="font-size: 13px; font-weight: 600; padding: 5px 10px; border-radius: 8px; background: #FDEFD2; color: #6B4100">air out (bleeding)</span>
+        <span style="font-size: 13px; font-weight: 600; padding: 5px 10px; border-radius: 8px; background: #FDEFD2; color: #6B4100">blocked passage</span>
+      </div>
+    </div>
+
+    <label style="display: flex; align-items: center; gap: 10px; font-size: 13px; color: #565D68; min-height: 44px">
+      <input type="checkbox" checked style="width: 20px; height: 20px; accent-color: #111418">
+      Save my corrections to improve the model
+    </label>
+  </div>
+
+  <div style="padding: 12px 20px 30px 20px; background: #FFFFFF; border-top: 1px solid #DDE1E6">
+    <a href="JobCard.dc.html" style="display: flex; align-items: center; justify-content: center; gap: 8px; min-height: 54px; border-radius: 14px; background: {{accent}}; font-size: 16px; font-weight: 700">
+      Create job card
+      <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
+    </a>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"accent":{"editor":"color","default":"#F5A524","options":["#F5A524","#FFD23F","#4CC38A","#7AB8FF"]},"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { tab: 'mixed', hole: null };
+  }
+  renderVals() {
+    const accent = this.props.accent ?? '#F5A524';
+    const base = 'min-height: 44px; border: 0; border-radius: 9px; font-family: Inter, "Noto Sans Kannada", sans-serif; font-size: 14px; font-weight: 600; cursor: pointer; ';
+    const tabs = [
+      { id: 'mixed', label: 'Mixed' },
+      { id: 'kn', label: 'ಕನ್ನಡ' },
+      { id: 'en', label: 'English' }
+    ].map((t) => {
+      const on = this.state.tab === t.id;
+      return {
+        label: t.label,
+        pressed: on ? 'true' : 'false',
+        style: base + (on ? 'background: #FFFFFF; color: #111418; box-shadow: 0 1px 3px rgba(17,20,24,0.15);' : 'background: transparent; color: #565D68;'),
+        pick: () => this.setState({ tab: t.id })
+      };
+    });
+    const hole = this.state.hole;
+    const word = hole || 'black';
+    const holeStyle = hole
+      ? 'font-family: Inter, sans-serif; font-weight: 600; background: #FDEFD2; color: #6B4100; padding: 1px 6px; border-radius: 6px;'
+      : 'font-family: Inter, sans-serif; font-weight: 600; color: #15307A; text-decoration: underline dashed #1F4FD1 2px; text-underline-offset: 4px;';
+    return {
+      accent,
+      tabs,
+      showMixed: this.state.tab === 'mixed',
+      showKannada: this.state.tab === 'kn',
+      showEnglish: this.state.tab === 'en',
+      holeWord: word,
+      holeWordKn: word === 'block' ? 'ಬ್ಲಾಕ್' : 'ಬ್ಲ್ಯಾಕ್',
+      holeWordEn: word === 'block' ? 'blocked' : 'black',
+      holeStyle,
+      needsCheck: !hole,
+      checked: !!hole,
+      pickBlock: () => this.setState({ hole: 'block' }),
+      pickBlack: () => this.setState({ hole: 'black' })
+    };
+  }
+}
+</script>
+</body>
+</html>

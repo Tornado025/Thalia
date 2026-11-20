@@ -1,0 +1,63 @@
+[
+  {
+    "term": "drain bolt",
+    "kn": "ಡ್ರೈನ್ ಬೋಲ್ಟ್",
+    "category": "part",
+    "variants": [
+      "dry bolt"
+    ],
+    "meaning": "Bolt that releases coolant or oil"
+  },
+  {
+    "term": "air out",
+    "kn": "ಏರ್ ಔಟ್",
+    "category": "action",
+    "variants": [
+      "layer out"
+    ],
+    "meaning": "Bleeding trapped air from the line"
+  },
+  {
+    "term": "block",
+    "kn": "ಬ್ಲಾಕ್",
+    "category": "fault",
+    "variants": [
+      {
+        "text": "black",
+        "onlyAfter": [
+          "hole",
+          "passage"
+        ]
+      }
+    ],
+    "meaning": "Passage is clogged"
+  },
+  {
+    "term": "coolant",
+    "kn": "ಕೂಲೆಂಟ್",
+    "category": "part",
+    "variants": [],
+    "meaning": "Engine cooling liquid"
+  },
+  {
+    "term": "clutch plate",
+    "kn": "ಕ್ಲಚ್ ಪ್ಲೇಟ್",
+    "category": "part",
+    "variants": [],
+    "meaning": "Worn plate causes slipping"
+  },
+  {
+    "term": "pickup",
+    "kn": "ಪಿಕಪ್",
+    "category": "fault",
+    "variants": [],
+    "meaning": "Acceleration response"
+  },
+  {
+    "term": "silencer",
+    "kn": "ಸೈಲೆನ್ಸರ್",
+    "category": "part",
+    "variants": [],
+    "meaning": "Exhaust muffler"
+  }
+]

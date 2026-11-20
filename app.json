@@ -1,0 +1,48 @@
+{
+  "expo": {
+    "name": "Thalia",
+    "slug": "thalia",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/images/icon.png",
+    "scheme": "thalia",
+    "userInterfaceStyle": "light",
+    "ios": {
+      "bundleIdentifier": "in.rvce.thalia"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "backgroundColor": "#F5A524",
+        "foregroundImage": "./assets/images/android-icon-foreground.png",
+        "backgroundImage": "./assets/images/android-icon-background.png",
+        "monochromeImage": "./assets/images/android-icon-monochrome.png"
+      },
+      "predictiveBackGestureEnabled": false,
+      "package": "in.rvce.thalia"
+    },
+    "plugins": [
+      "expo-router",
+      [
+        "expo-splash-screen",
+        {
+          "backgroundColor": "#F3F4F6",
+          "image": "./assets/images/splash-icon.png",
+          "imageWidth": 76
+        }
+      ],
+      "expo-sqlite",
+      "expo-font",
+      [
+        "expo-audio",
+        {
+          "microphonePermission": "Thalia records your voice to transcribe repair notes on this phone."
+        }
+      ],
+      "expo-sharing"
+    ],
+    "experiments": {
+      "typedRoutes": true,
+      "reactCompiler": true
+    }
+  }
+}

@@ -1,0 +1,50 @@
+[
+  {
+    "id": "small",
+    "name": "Thalia Small",
+    "base": "Whisper small · full fine-tune",
+    "file": "thalia-small-q8_0.bin",
+    "url": "<FILL>",
+    "sha256": "<FILL>",
+    "sizeBytes": 0,
+    "minRamGB": 3,
+    "default": true,
+    "eval": {
+      "wer": null,
+      "cer": null,
+      "jta": null
+    }
+  },
+  {
+    "id": "indic",
+    "name": "Thalia Indic",
+    "base": "IndicWhisper-Kannada · LoRA merged",
+    "file": "thalia-indic-q8_0.bin",
+    "url": "<FILL>",
+    "sha256": "<FILL>",
+    "sizeBytes": 0,
+    "minRamGB": 4,
+    "default": false,
+    "eval": {
+      "wer": null,
+      "cer": null,
+      "jta": null
+    }
+  },
+  {
+    "id": "medium",
+    "name": "Thalia Medium",
+    "base": "Whisper medium · LoRA merged",
+    "file": "thalia-medium-q8_0.bin",
+    "url": "<FILL>",
+    "sha256": "<FILL>",
+    "sizeBytes": 0,
+    "minRamGB": 6,
+    "default": false,
+    "eval": {
+      "wer": null,
+      "cer": null,
+      "jta": null
+    }
+  }
+]
