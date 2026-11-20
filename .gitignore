@@ -43,8 +43,8 @@ example
 /android
 
 # Thalia: model weights are never committed (downloaded at runtime; see docs/MODEL_PIPELINE.md)
-models/
-.colab-out/
+/models/
+/.colab-out/
 *.bin
 *.safetensors
 *.gguf

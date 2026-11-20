@@ -38,7 +38,8 @@
           "microphonePermission": "Thalia records your voice to transcribe repair notes on this phone."
         }
       ],
-      "expo-sharing"
+      "expo-sharing",
+      "expo-asset"
     ],
     "experiments": {
       "typedRoutes": true,

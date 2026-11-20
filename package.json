@@ -7,6 +7,7 @@
     "@expo-google-fonts/noto-sans-kannada": "^0.4.3",
     "@expo-google-fonts/space-grotesk": "^0.4.1",
     "expo": "~58.0.26",
+    "expo-asset": "~58.0.21",
     "expo-audio": "~58.0.12",
     "expo-constants": "~58.0.16",
     "expo-dev-client": "~58.0.21",
@@ -36,6 +37,8 @@
   "devDependencies": {
     "@types/jest": "^30.0.0",
     "@types/react": "~19.3.0",
+    "eslint": "^9.0.0",
+    "eslint-config-expo": "~58.0.4",
     "jest": "^30.5.2",
     "jest-expo": "^58.0.15",
     "typescript": "~6.0.3"

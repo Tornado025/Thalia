@@ -157,6 +157,7 @@ CREATE TABLE recordings (
   model_id TEXT,
   raw_text TEXT,                  -- exactly what the model returned
   text TEXT,                      -- after normalize + user corrections
+  words_json TEXT,                -- normalized words with timing / p / fixedFrom (drives highlights + "Not sure")
   terms_json TEXT,
   job_card_json TEXT,
   status TEXT NOT NULL DEFAULT 'draft',   -- draft | saved
