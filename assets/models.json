@@ -2,49 +2,49 @@
   {
     "id": "small",
     "name": "Thalia Small",
-    "base": "Whisper small · full fine-tune",
+    "base": "Whisper small · fine-tuned on 235 min",
     "file": "thalia-small-q8_0.bin",
     "url": "<FILL>",
-    "sha256": "<FILL>",
-    "sizeBytes": 0,
+    "sha256": "e23105f46ef9116a099ec9fef32fbefb04a0cc85369d77b0eda646cf39a4e00f",
+    "sizeBytes": 264464624,
     "minRamGB": 3,
     "default": true,
     "eval": {
-      "wer": null,
-      "cer": null,
-      "jta": null
+      "wer": 44.5,
+      "cer": 21.4,
+      "jta": 78.6
     }
   },
   {
     "id": "indic",
     "name": "Thalia Indic",
-    "base": "IndicWhisper-Kannada · LoRA merged",
+    "base": "IndicWhisper-Kannada (medium) · fine-tuned",
     "file": "thalia-indic-q8_0.bin",
     "url": "<FILL>",
-    "sha256": "<FILL>",
-    "sizeBytes": 0,
+    "sha256": "496668b9a5f7f3c9369a8cd13b004db7785c5b5d2b7a3ab4fcd9f3609b65c45e",
+    "sizeBytes": 823369796,
     "minRamGB": 4,
     "default": false,
     "eval": {
-      "wer": null,
-      "cer": null,
-      "jta": null
+      "wer": 30.5,
+      "cer": 14.4,
+      "jta": 82.7
     }
   },
   {
-    "id": "medium",
-    "name": "Thalia Medium",
-    "base": "Whisper medium · LoRA merged",
-    "file": "thalia-medium-q8_0.bin",
+    "id": "small60",
+    "name": "Thalia Small 60",
+    "base": "Whisper small · fine-tuned on 60 min",
+    "file": "thalia-small60-q8_0.bin",
     "url": "<FILL>",
-    "sha256": "<FILL>",
-    "sizeBytes": 0,
-    "minRamGB": 6,
+    "sha256": "a1fc3b4f79aa586d5085682637a8c799b76ee0112f1028db2c022c21d6cbdeb9",
+    "sizeBytes": 264464624,
+    "minRamGB": 3,
     "default": false,
     "eval": {
-      "wer": null,
-      "cer": null,
-      "jta": null
+      "wer": 58.2,
+      "cer": 27.9,
+      "jta": 62.7
     }
   }
 ]

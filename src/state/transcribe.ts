@@ -1,5 +1,7 @@
 import { engineKind, getEngine } from '../asr'
 import { getRecording, updateRecording } from '../db/recordings'
+import { modelById } from '../models/manifest'
+import { isInstalled, modelFile } from '../models/store'
 import { buildJobCard, buildPrompt, findTerms, lexicon, normalizeWords } from '../nlp'
 import { useSettings } from './useSettings'
 
@@ -17,9 +19,15 @@ export async function transcribeRecording(id: string, onProgress?: (pct: number)
   if (!rec) throw new Error('Recording not found')
   const { activeModelId, boostWorkshopWords } = useSettings.getState()
 
+  const model = modelById(activeModelId)
+  if (!model) throw new Error('No model selected — pick one on the Models tab')
+  if (engineKind === 'whisper' && !isInstalled(model)) {
+    throw new Error(`${model.name} is not on this phone yet — download it on the Models tab`)
+  }
+
   const engine = getEngine()
-  // The whisper engine resolves the model file path in M3; the mock ignores it.
-  if (!engine.isLoaded()) await engine.load(activeModelId)
+  // Loads lazily and keeps it loaded; switching models releases the old one first.
+  await engine.load(engineKind === 'whisper' ? modelFile(model).uri : model.id)
   const result = await engine.transcribe(rec.wavPath, {
     language: 'kn',
     prompt: boostWorkshopWords ? buildPrompt(lexicon) : undefined,

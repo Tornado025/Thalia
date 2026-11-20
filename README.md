@@ -7,7 +7,7 @@ RVCE CSE project. Start with [`CLAUDE.md`](CLAUDE.md) and the docs in [`docs/`](
 
 ```sh
 npm install
-cp .env.example .env            # EXPO_PUBLIC_ASR_ENGINE=mock until M3
+cp .env.example .env.local      # EXPO_PUBLIC_ASR_ENGINE=whisper (or mock: no model needed)
 npm test                        # jest: src/nlp + src/audio
 npx tsc --noEmit                # type check
 npx expo lint
@@ -29,7 +29,7 @@ npx expo run:android
 | Path | What |
 |---|---|
 | `app/` | Expo Router screens (tabs: Record · History · Models; stack: recording, transcript, job, compare) |
-| `src/asr` | `ASREngine` interface, mock engine (whisper engine in M3) |
+| `src/asr` | `ASREngine` interface, mock engine, whisper.rn engine |
 | `src/nlp` | normalize, findTerms, findUncertain, toAllKannada, buildJobCard — pure + unit-tested |
 | `src/audio` | PCM collector + resampler, WAV encode/parse/save, noise meter, waveform peaks, shared player |
 | `src/db` | expo-sqlite client, migrations, recordings, corrections |
@@ -46,12 +46,17 @@ npx expo run:android
 - [x] **M2** real audio — expo-audio `AudioStream` → 16 kHz mono PCM16 WAV, live noise meter + waveform,
   pause/resume, mic-permission screen, one-at-a-time playback in Transcript + History.
   Verified on a Redmi Note 13 Pro 5G (HyperOS): live waveform/noise meter, record, play back.
-- [ ] **M3** whisper.rn engine, model download + sha256
+- [ ] **M3** whisper.rn engine, model store (download + sha256, delete, USB copy), no-model state — on-device run pending
 - [ ] **M4** correction export, PDF share, re-dictate (plain-text share is done)
 - [ ] **M5** Compare + Benchmark
 - [ ] **M6** hardening + report data
 
 ## Models
+
+Three q8_0 models (converted from the trained HF checkpoints with `docs/MODEL_PIPELINE.md`):
+`thalia-small` (Whisper-small, 235 min, 264 MB, default), `thalia-indic` (IndicWhisper-Kannada medium,
+823 MB, most accurate), `thalia-small60` (Whisper-small, 60 min, 264 MB). Until they are hosted, copy one
+to a USB-connected phone with `scripts/push-model.sh models/ggml/thalia-small-q8_0.bin`.
 
 Trained weights are **not** in this repo (`models/` is gitignored). Convert them to GGML `q8_0`
 following [`docs/MODEL_PIPELINE.md`](docs/MODEL_PIPELINE.md), publish to Hugging Face, and fill

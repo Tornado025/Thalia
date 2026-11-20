@@ -1,5 +1,5 @@
 import { router, useFocusEffect } from 'expo-router'
-import { ChevronRight, Cpu, Mic, Wrench } from 'lucide-react-native'
+import { ChevronRight, Cpu, Download, Mic, Wrench } from 'lucide-react-native'
 import { useCallback, useState } from 'react'
 import { Pressable, ScrollView, StyleSheet, View } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
@@ -7,9 +7,10 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import { engineKind } from '@/asr'
 import { listRecordings, type Recording } from '@/db/recordings'
 import { modelById } from '@/models/manifest'
+import { useModels } from '@/models/store'
 import type { VehicleType } from '@/nlp'
 import { useSettings } from '@/state/useSettings'
-import { Card, RecordingRow, Segmented, Txt } from '@/ui/components'
+import { Button, Card, RecordingRow, Segmented, Txt } from '@/ui/components'
 import { color, radius, space } from '@/ui/theme'
 
 const VEHICLES: { value: VehicleType; label: string }[] = [
@@ -21,12 +22,15 @@ const VEHICLES: { value: VehicleType; label: string }[] = [
 export default function HomeScreen() {
   const { vehicle, activeModelId, set } = useSettings()
   const model = modelById(activeModelId)
+  const { installed, refresh } = useModels()
+  const ready = engineKind === 'mock' || (model ? installed[model.id] : false)
   const [recent, setRecent] = useState<Recording[]>([])
 
   useFocusEffect(
     useCallback(() => {
       listRecordings('', 2).then(setRecent)
-    }, []),
+      refresh()
+    }, [refresh]),
   )
 
   return (
@@ -64,6 +68,16 @@ export default function HomeScreen() {
           <Segmented options={VEHICLES} value={vehicle} onChange={(v) => set({ vehicle: v })} />
         </View>
 
+        {!ready ? (
+          <Card style={styles.noModel}>
+            <Download size={32} color={color.ink} />
+            <Txt variant="subTitle" style={{ textAlign: 'center' }}>Download a model to start</Txt>
+            <Txt variant="caption" style={{ textAlign: 'center', fontSize: 14 }}>
+              Speech recognition runs on this phone. {model?.name ?? 'The model'} isn’t here yet.
+            </Txt>
+            <Button big label="Go to Models" onPress={() => router.navigate('/models')} style={{ alignSelf: 'stretch' }} />
+          </Card>
+        ) : (
         <View style={styles.micWrap}>
           <Pressable
             accessibilityRole="button"
@@ -77,6 +91,7 @@ export default function HomeScreen() {
           <Txt variant="semibold" style={{ fontSize: 17, marginTop: 6 }}>Tap and describe the job</Txt>
           <Txt variant="caption" style={{ fontSize: 13, textAlign: 'center' }}>ಕನ್ನಡದಲ್ಲಿ ಮಾತಾಡಿ — English part names are fine</Txt>
         </View>
+        )}
 
         {recent.length > 0 && (
           <View style={{ gap: 10 }}>
@@ -105,6 +120,7 @@ const styles = StyleSheet.create({
   modelCard: { flexDirection: 'row', alignItems: 'center' },
   change: { flexDirection: 'row', alignItems: 'center', gap: 4 },
   micWrap: { alignItems: 'center', gap: 4, paddingVertical: 8 },
+  noModel: { alignItems: 'center', gap: 10, paddingVertical: 24 },
   ring2: { padding: 14, borderRadius: radius.pill, backgroundColor: color.ringOuter },
   ring1: { padding: 12, borderRadius: radius.pill, backgroundColor: color.ringInner },
   mic: { width: MIC, height: MIC, borderRadius: MIC / 2, backgroundColor: color.accent, alignItems: 'center', justifyContent: 'center' },
