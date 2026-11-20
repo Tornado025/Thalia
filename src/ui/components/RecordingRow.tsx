@@ -2,10 +2,13 @@ import { router } from 'expo-router'
 import { ChevronRight } from 'lucide-react-native'
 import { Pressable, StyleSheet, View } from 'react-native'
 
+import { audioFileExists } from '../../audio/paths'
+import { usePlayback } from '../../audio/player'
 import type { Recording } from '../../db/recordings'
 import { uniqueTerms } from '../../nlp'
 import { formatClock, formatDuration, VEHICLE_LABEL } from '../format'
 import { color, touch } from '../theme'
+import { PlayButton } from './AudioRow'
 import { Card } from './Card'
 import { ChipRow, StatusPill } from './Chip'
 import { Txt } from './Txt'
@@ -17,6 +20,9 @@ export function recordingLabel(r: Recording) {
 
 /** History / Home row. Tap opens the transcript; "Job card ›" opens the card. */
 export function RecordingRow({ rec, onLongPress, compact }: { rec: Recording; onLongPress?: () => void; compact?: boolean }) {
+  const { id: activeId, playing, positionSec, toggle } = usePlayback()
+  const active = activeId === rec.id
+  const hasAudio = !compact && audioFileExists(rec.wavPath)
   return (
     <Pressable
       accessibilityRole="button"
@@ -25,13 +31,18 @@ export function RecordingRow({ rec, onLongPress, compact }: { rec: Recording; on
       onLongPress={onLongPress}>
       <Card style={styles.card}>
         <View style={styles.top}>
+          {hasAudio && <PlayButton playing={active && playing} onPress={() => toggle(rec.id, rec.wavPath)} />}
           <View style={{ flex: 1, gap: 2 }}>
             <Txt variant="semibold" numberOfLines={1}>{recordingLabel(rec)}</Txt>
-            <Txt variant="caption">{formatClock(rec.createdAt)} · {formatDuration(rec.durationMs)}</Txt>
+            <Txt variant="caption">
+              {formatClock(rec.createdAt)} · {active ? `${formatDuration(positionSec * 1000)} / ` : ''}{formatDuration(rec.durationMs)}
+            </Txt>
           </View>
           <StatusPill status={rec.status} />
         </View>
-        {!compact && rec.waveform.length > 0 && <Waveform peaks={rec.waveform} height={28} />}
+        {!compact && rec.waveform.length > 0 && (
+          <Waveform peaks={rec.waveform} height={28} progress={active && rec.durationMs ? (positionSec * 1000) / rec.durationMs : 0} />
+        )}
         {!compact && rec.text ? (
           <Txt variant="body" numberOfLines={2} style={{ color: color.textSecondary, fontSize: 14 }}>{rec.text}</Txt>
         ) : null}
@@ -57,7 +68,7 @@ export function RecordingRow({ rec, onLongPress, compact }: { rec: Recording; on
 
 const styles = StyleSheet.create({
   card: { gap: 10 },
-  top: { flexDirection: 'row', alignItems: 'flex-start', gap: 10 },
+  top: { flexDirection: 'row', alignItems: 'center', gap: 10 },
   bottom: { flexDirection: 'row', alignItems: 'center', gap: 8 },
   link: { flexDirection: 'row', alignItems: 'center', minHeight: touch.min, paddingLeft: 8 },
 })

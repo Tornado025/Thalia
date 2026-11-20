@@ -31,7 +31,7 @@ npx expo run:android
 | `app/` | Expo Router screens (tabs: Record · History · Models; stack: recording, transcript, job, compare) |
 | `src/asr` | `ASREngine` interface, mock engine (whisper engine in M3) |
 | `src/nlp` | normalize, findTerms, findUncertain, toAllKannada, buildJobCard — pure + unit-tested |
-| `src/audio` | WAV encode/parse, noise meter, waveform peaks (recorder in M2) |
+| `src/audio` | PCM collector + resampler, WAV encode/parse/save, noise meter, waveform peaks, shared player |
 | `src/db` | expo-sqlite client, migrations, recordings, corrections |
 | `src/ui` | theme tokens + components |
 | `scripts/` | model pipeline helpers (`merge_lora.py`, `eval_ggml.py`) |
@@ -43,7 +43,9 @@ npx expo run:android
   Dev build verified on an Android 16 emulator (Pixel 8, arm64); Kannada fonts render.
 - [x] **M1** mock end-to-end — mock engine, `src/nlp` with pilot-fixture tests, DB + migrations,
   Home → Recording (fake timer) → Transcript (auto-fix, "Not sure" card, inline edit) → Job card → History.
-- [ ] **M2** real audio — `wav.ts`, `noise.ts`, `waveform.ts` done + tested; PCM recorder and playback to do.
+- [x] **M2** real audio — expo-audio `AudioStream` → 16 kHz mono PCM16 WAV, live noise meter + waveform,
+  pause/resume, mic-permission screen, one-at-a-time playback in Transcript + History.
+  Verified on the emulator (WAV reads back as 16 kHz mono 16-bit); still to check speech on a real phone.
 - [ ] **M3** whisper.rn engine, model download + sha256
 - [ ] **M4** correction export, PDF share, re-dictate (plain-text share is done)
 - [ ] **M5** Compare + Benchmark

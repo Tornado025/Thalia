@@ -1,74 +1,76 @@
 import { router } from 'expo-router'
-import { Check, Pause, Play, Trash2, X } from 'lucide-react-native'
-import { useEffect, useRef, useState } from 'react'
-import { ActivityIndicator, Alert, Pressable, StyleSheet, View } from 'react-native'
+import { Check, MicOff, Pause, Play, Trash2, X } from 'lucide-react-native'
+import { useEffect, useState } from 'react'
+import { ActivityIndicator, Alert, Linking, Pressable, StyleSheet, View } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
 import { engineKind } from '@/asr'
 import type { NoiseLevel } from '@/audio/noise'
-import { recordingWavPath } from '@/audio/paths'
-import { PEAK_COUNT, placeholderPeaks } from '@/audio/waveform'
+import { saveRecordingWav } from '@/audio/paths'
 import { newId } from '@/db/client'
 import { deleteRecording, getRecording, insertRecording } from '@/db/recordings'
 import { transcribeRecording } from '@/state/transcribe'
+import { useRecorder } from '@/state/useRecorder'
 import { useSettings } from '@/state/useSettings'
-import { Txt, Waveform } from '@/ui/components'
+import { Button, Txt, Waveform } from '@/ui/components'
 import { formatDuration, VEHICLE_LABEL } from '@/ui/format'
 import { color, radius, space, touch } from '@/ui/theme'
 
 const NOISE_COPY: Record<NoiseLevel, string> = { clean: 'Clean', moderate: 'Moderate', heavy: 'Heavy' }
+const NOISE_ORDER: NoiseLevel[] = ['clean', 'moderate', 'heavy']
 const MAX_MS = 5 * 60_000
 const CONFIRM_DISCARD_MS = 5_000
 
-/**
- * M1: fake timer + simulated levels; no audio is captured (mock engine).
- * M2 replaces the simulation with the PCM recorder, noise meter and WAV writer.
- */
 export default function RecordingScreen() {
   const vehicle = useSettings((s) => s.vehicle)
-  const [elapsed, setElapsed] = useState(0)
-  const [paused, setPaused] = useState(false)
-  const [levels, setLevels] = useState<number[]>(() => new Array(PEAK_COUNT).fill(0.05))
-  const [noise] = useState<NoiseLevel>('clean')
+  const rec = useRecorder()
   const [progress, setProgress] = useState<number | null>(null)
-  const tick = useRef(0)
+  const paused = rec.state === 'paused'
 
   useEffect(() => {
-    if (paused || progress !== null) return
-    const id = setInterval(() => {
-      tick.current++
-      setElapsed((e) => Math.min(MAX_MS, e + 100))
-      const next = placeholderPeaks(String(tick.current), 1)[0]
-      setLevels((l) => [...l.slice(1), next])
-    }, 100)
-    return () => clearInterval(id)
-  }, [paused, progress])
-
-  useEffect(() => {
-    if (elapsed >= MAX_MS) finish()
+    rec.start()
+    // Start once on open; the stream is released when the screen unmounts.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [elapsed])
+  }, [])
+
+  useEffect(() => {
+    if (rec.elapsedMs >= MAX_MS && rec.state === 'recording') finish()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [rec.elapsedMs])
+
+  const close = () => {
+    rec.discard()
+    router.back()
+  }
 
   const discard = () => {
-    if (elapsed < CONFIRM_DISCARD_MS) return router.back()
+    if (rec.elapsedMs < CONFIRM_DISCARD_MS) return close()
     Alert.alert('Discard this recording?', undefined, [
       { text: 'Keep recording', style: 'cancel' },
-      { text: 'Discard', style: 'destructive', onPress: () => router.back() },
+      { text: 'Discard', style: 'destructive', onPress: close },
     ])
   }
 
   async function finish() {
-    if (progress !== null) return
+    if (progress !== null || (rec.state !== 'recording' && rec.state !== 'paused')) return
     setProgress(0)
+    const audio = rec.stop()
     const id = newId()
-    await insertRecording({
-      id,
-      vehicleType: vehicle,
-      wavPath: recordingWavPath(id),
-      durationMs: elapsed,
-      noiseLevel: noise,
-      waveform: placeholderPeaks(id),
-    })
+    try {
+      const wavPath = await saveRecordingWav(id, audio.samples)
+      await insertRecording({
+        id,
+        vehicleType: vehicle,
+        wavPath,
+        durationMs: audio.durationMs,
+        noiseLevel: audio.noiseLevel,
+        waveform: audio.waveform,
+      })
+    } catch (e) {
+      setProgress(null)
+      Alert.alert('Could not save the recording', e instanceof Error ? e.message : String(e), [{ text: 'OK', onPress: () => router.back() }])
+      return
+    }
     runTranscription(id)
   }
 
@@ -83,14 +85,32 @@ export default function RecordingScreen() {
         {
           text: 'Delete recording', style: 'destructive',
           onPress: async () => {
-            const rec = await getRecording(id)
-            if (rec) await deleteRecording(rec)
+            const r = await getRecording(id)
+            if (r) await deleteRecording(r)
             router.back()
           },
         },
         { text: 'Retry', onPress: () => runTranscription(id) },
       ])
     }
+  }
+
+  if (rec.state === 'denied' || rec.state === 'error') {
+    return (
+      <SafeAreaView style={[styles.page, styles.center]}>
+        <MicOff size={48} color={color.dText} />
+        <Txt variant="subTitle" style={{ color: color.dText, textAlign: 'center' }}>
+          {rec.state === 'denied' ? 'Microphone is off for Thalia' : 'Could not start the microphone'}
+        </Txt>
+        <Txt variant="body" style={{ color: color.dMuted, textAlign: 'center' }}>
+          {rec.state === 'denied'
+            ? 'Allow microphone access in Settings to record jobs. Audio stays on this phone.'
+            : rec.error}
+        </Txt>
+        {rec.state === 'denied' && <Button big label="Open Settings" onPress={() => Linking.openSettings()} style={{ alignSelf: 'stretch' }} />}
+        <Button big label="Close" kind="secondary" onPress={() => router.back()} style={{ alignSelf: 'stretch' }} />
+      </SafeAreaView>
+    )
   }
 
   return (
@@ -102,7 +122,7 @@ export default function RecordingScreen() {
         <View style={styles.status}>
           <View style={[styles.dot, paused && { backgroundColor: color.dMuted }]} />
           <Txt variant="semibold" style={{ color: color.dText }}>
-            {paused ? 'Paused' : 'Listening'} · {formatDuration(elapsed)}
+            {rec.state === 'idle' ? 'Starting…' : paused ? 'Paused' : 'Listening'} · {formatDuration(rec.elapsedMs)}
           </Txt>
         </View>
         <View style={styles.pill}>
@@ -110,36 +130,35 @@ export default function RecordingScreen() {
         </View>
       </View>
 
-      {engineKind === 'mock' && (
-        <Txt variant="caption" style={{ color: color.dMuted, textAlign: 'center' }}>
-          Mock engine — no audio is captured yet
-        </Txt>
-      )}
-
       <View style={styles.noiseCard}>
         <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
           <Txt variant="overline" style={{ color: color.dMuted }}>Background noise</Txt>
-          <Txt variant="semibold" style={{ color: color.dText }}>{NOISE_COPY[noise]}</Txt>
+          <Txt variant="semibold" style={{ color: color.dText }}>{NOISE_COPY[rec.noise]}</Txt>
         </View>
         <View style={styles.meter}>
-          {(['clean', 'moderate', 'heavy'] as const).map((l, i) => (
+          {NOISE_ORDER.map((l, i) => (
             <View
               key={l}
-              style={[styles.meterSeg, i <= ['clean', 'moderate', 'heavy'].indexOf(noise) && { backgroundColor: i === 2 ? color.recRed : color.accent }]}
+              style={[styles.meterSeg, i <= NOISE_ORDER.indexOf(rec.noise) && { backgroundColor: i === 2 ? color.recRed : color.accent }]}
             />
           ))}
         </View>
-        {noise === 'heavy' && (
+        {rec.noise === 'heavy' && (
           <Txt variant="caption" style={{ color: color.dMuted }}>Too loud — hold the phone closer to your mouth.</Txt>
         )}
       </View>
 
       <View style={styles.wave}>
-        <Waveform peaks={levels} height={96} barColor={color.accent} />
+        <Waveform peaks={rec.levels} height={96} barColor={paused ? color.dBorder : color.accent} />
       </View>
 
       <View style={styles.transcriptArea}>
         <Txt variant="body" style={{ color: color.dMuted, textAlign: 'center' }}>Transcribing after you stop</Txt>
+        {engineKind === 'mock' && (
+          <Txt variant="caption" style={{ color: color.dMuted, textAlign: 'center', marginTop: 6 }}>
+            Mock engine — audio is saved, the transcript is a sample sentence
+          </Txt>
+        )}
       </View>
 
       <View style={styles.bottom}>
@@ -150,7 +169,7 @@ export default function RecordingScreen() {
         <Pressable accessibilityRole="button" accessibilityLabel="Done" onPress={finish} style={styles.done}>
           <Check size={44} color={color.ink} strokeWidth={2.6} />
         </Pressable>
-        <Pressable accessibilityRole="button" onPress={() => setPaused((p) => !p)} style={styles.sideBtn}>
+        <Pressable accessibilityRole="button" onPress={() => rec.setPaused(!paused)} style={styles.sideBtn}>
           {paused ? <Play size={22} color={color.dText} /> : <Pause size={22} color={color.dText} />}
           <Txt variant="label" style={{ color: color.dText }}>{paused ? 'Resume' : 'Pause'}</Txt>
         </Pressable>
@@ -169,6 +188,7 @@ export default function RecordingScreen() {
 
 const styles = StyleSheet.create({
   page: { flex: 1, backgroundColor: color.dBg, paddingHorizontal: space.screen, gap: 16 },
+  center: { alignItems: 'center', justifyContent: 'center', gap: 14 },
   top: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingTop: 8 },
   iconBtn: { width: touch.min, height: touch.min, borderRadius: radius.input, backgroundColor: color.dRaised, alignItems: 'center', justifyContent: 'center' },
   status: { flexDirection: 'row', alignItems: 'center', gap: 8 },

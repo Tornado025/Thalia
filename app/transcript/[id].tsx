@@ -10,7 +10,7 @@ import {
   buildJobCard, findTerms, findUncertain, joinWords, lexicon, toAllKannada, uniqueTerms, type NWord,
 } from '@/nlp'
 import { useSettings } from '@/state/useSettings'
-import { Button, Card, ChipRow, Header, IconButton, Segmented, TermText, Txt } from '@/ui/components'
+import { AudioRow, Button, Card, ChipRow, Header, IconButton, Segmented, TermText, Txt } from '@/ui/components'
 import { color, font, radius, size, space, touch } from '@/ui/theme'
 
 type View_ = 'mixed' | 'kannada' | 'english'
@@ -80,6 +80,7 @@ export default function TranscriptScreen() {
     <SafeAreaView style={{ flex: 1 }} edges={['top', 'bottom']}>
       <Header title="Review transcript" />
       <ScrollView contentContainerStyle={styles.page} keyboardShouldPersistTaps="handled">
+        <AudioRow id={rec.id} uri={rec.wavPath} durationMs={rec.durationMs} peaks={rec.waveform} />
         <Segmented
           options={[
             { value: 'mixed', label: 'Mixed' },

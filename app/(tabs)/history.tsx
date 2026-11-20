@@ -4,6 +4,7 @@ import { useCallback, useState } from 'react'
 import { Alert, SectionList, StyleSheet, TextInput, View } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
+import { usePlayback } from '@/audio/player'
 import { deleteRecording, listRecordings, type Recording } from '@/db/recordings'
 import { Button, RecordingRow, TitleBlock, Txt, recordingLabel } from '@/ui/components'
 import { dayLabel } from '@/ui/format'
@@ -32,7 +33,13 @@ export default function HistoryScreen() {
   function confirmDelete(r: Recording) {
     Alert.alert(recordingLabel(r), 'Delete this recording and its audio?', [
       { text: 'Cancel', style: 'cancel' },
-      { text: 'Delete', style: 'destructive', onPress: () => deleteRecording(r).then(load) },
+      {
+        text: 'Delete', style: 'destructive',
+        onPress: () => {
+          if (usePlayback.getState().id === r.id) usePlayback.getState().stop()
+          deleteRecording(r).then(load)
+        },
+      },
     ])
   }
 
